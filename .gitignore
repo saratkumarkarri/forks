@@ -1,0 +1,12 @@
+..idea
+.idea
+.terragrunt-cache
+.terraform.lock.hcl
+terraform.tfstate
+.terraform
+.terraform.lock.hcl
+pkg
+go*
+.*swp
+.DS_Store
+
