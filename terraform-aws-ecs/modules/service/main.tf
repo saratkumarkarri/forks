@@ -1317,13 +1317,15 @@ resource "aws_appautoscaling_scheduled_action" "this" {
 locals {
   create_security_group = var.create && var.create_security_group && var.network_mode == "awsvpc"
   security_group_name   = try(coalesce(var.security_group_name, var.name), "")
+  subnet_ids = var.subnet_ids
+  vpc_id     = var.vpc_id
 }
 
-data "aws_subnet" "this" {
-  count = local.create_security_group ? 1 : 0
+# data "aws_subnet" "this" {
+#   count = local.create_security_group ? 1 : 0
 
-  id = element(var.subnet_ids, 0)
-}
+#   id = element(var.subnet_ids, 0)
+# }
 
 resource "aws_security_group" "this" {
   count = local.create_security_group ? 1 : 0
@@ -1331,7 +1333,7 @@ resource "aws_security_group" "this" {
   name        = var.security_group_use_name_prefix ? null : local.security_group_name
   name_prefix = var.security_group_use_name_prefix ? "${local.security_group_name}-" : null
   description = var.security_group_description
-  vpc_id      = data.aws_subnet.this[0].vpc_id
+  vpc_id      = var.vpc_id
 
   tags = merge(
     var.tags,
