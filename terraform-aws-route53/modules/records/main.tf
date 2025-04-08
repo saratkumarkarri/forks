@@ -22,7 +22,7 @@ resource "aws_route53_record" "this" {
 
   zone_id = local.zone_id
 
-  name                             = each.value.name != "" ? (lookup(each.value, "full_name_override", false) ? each.value.name : "${each.value.name}.${local.zone_name}") : local.zone_name
+  name                             = each.value.name
   type                             = each.value.type
   ttl                              = lookup(each.value, "ttl", null)
   records                          = try(each.value.records, null)
