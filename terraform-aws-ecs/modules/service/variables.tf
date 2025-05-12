@@ -450,12 +450,6 @@ variable "create_task_exec_policy" {
   default     = true
 }
 
-variable "is_gov_cloud" {
-  description = "Set to true if deploying in GovCloud"
-  type        = bool
-  default     = false
-}
-
 variable "task_exec_ssm_param_arns" {
   description = "List of SSM parameter ARNs the task execution role will be permitted to get/read"
   type        = list(string)
