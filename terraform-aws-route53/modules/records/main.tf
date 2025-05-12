@@ -19,7 +19,7 @@ locals {
 
 resource "aws_route53_record" "this" {
   for_each = { for k, v in local.recordsets : k => v if var.create && (var.zone_id != null || var.zone_name != null) }
-
+  provider = aws.dns
   zone_id = local.zone_id
 
   name                             = each.value.name

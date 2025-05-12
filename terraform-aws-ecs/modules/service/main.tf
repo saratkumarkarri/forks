@@ -6,6 +6,15 @@ locals {
   account_id = data.aws_caller_identity.current.account_id
   partition  = data.aws_partition.current.partition
   region     = data.aws_region.current.name
+  aws_partition = var.is_gov_cloud ? "aws-us-gov" : "aws"
+
+  task_exec_ssm_param_arns = [
+    "arn:${local.aws_partition}:ssm:*:*:parameter/*"
+  ]
+
+  task_exec_secret_arns = [
+    "arn:${local.aws_partition}:secretsmanager:*:*:secret:*"
+  ]
 }
 
 ################################################################################
@@ -826,22 +835,22 @@ data "aws_iam_policy_document" "task_exec" {
   }
 
   dynamic "statement" {
-    for_each = length(var.task_exec_ssm_param_arns) > 0 ? [1] : []
+    for_each = length(local.task_exec_ssm_param_arns) > 0 ? [1] : []
 
     content {
       sid       = "GetSSMParams"
       actions   = ["ssm:GetParameters"]
-      resources = var.task_exec_ssm_param_arns
+      resources = local.task_exec_ssm_param_arns
     }
   }
 
   dynamic "statement" {
-    for_each = length(var.task_exec_secret_arns) > 0 ? [1] : []
+    for_each = length(local.task_exec_secret_arns) > 0 ? [1] : []
 
     content {
       sid       = "GetSecrets"
       actions   = ["secretsmanager:GetSecretValue"]
-      resources = var.task_exec_secret_arns
+      resources = local.task_exec_secret_arns
     }
   }
 
