@@ -1,0 +1,53 @@
+version: ""
+
+formatter: markdown table
+
+name: aws-terraform-cloud-next/persistent-storage
+
+content: |-
+
+  <a target="_blank" href="https://qumulo.com/"><img src="../images/qumulo-scale-anywhere-logo.webp" style="width:150px;height:53px;"></a>
+
+  ## Configure Terraform provider.tf
+  This Terraform now defaults to store state on S3.  As such the ./provider.tf must both be configured with the S3 bucket and S3 bucket region you choose to store state in.
+  If you don't have an explicit bucket for storing state you may use the same 'utility bucket' that is used in the TFVAR 's3_bucket_name' at the top-level of this repo.  
+  Note you can't put variables in the provider backend config, which is why this note is here.
+
+
+  ### Persistent Storage Deployment Example
+  
+  ```hcl
+  {{ include "examples/storage.tf" }}
+  ```
+  ---
+  
+  ## Terraform Documentation
+
+  > ℹ️ **Note:** This repository uses documentation generated with Terraform-Docs.  
+  
+  {{ .Requirements }}
+  
+  {{ .Inputs }}
+  
+  {{ .Outputs }}
+  
+  ---
+
+  ## About This Repository
+  This repository uses the [MIT license](LICENSE). All contents Copyright &copy; 2024 [Qumulo, Inc.](https://qumulo.com), except where specified. All trademarks are property of their respective owners.
+
+  For more information about this repository, contact [Dack Busch](https://github.com/dackbusch) and [Gokul Kupparaj](https://github.com/gokulku).
+
+sections:
+  show:
+    - requirements
+    - inputs
+    - outputs
+
+sort:
+  enabled: true
+  by: name
+
+output:
+  file: README.md
+  mode: replace

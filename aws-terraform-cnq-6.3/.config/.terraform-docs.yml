@@ -1,0 +1,72 @@
+version: ""
+
+formatter: markdown table
+
+name: aws-terraform-cloud-next
+
+content: |-
+
+  <a target="_blank" href="https://qumulo.com/"><img src="./images/qumulo-scale-anywhere-logo.webp" style="width:150px;height:53px;"></a>
+
+  # Deploying Cloud Native Qumulo (CNQ) on AWS by Using Terraform [![Latest Release](https://img.shields.io/github/release/qumulo/aws-terraform-cloud-next.svg)](https://github.com/qumulo/aws-terraform-cloud-next/releases)
+  This repository contains a number of comprehensive Terraform configurations that let you deploy S3 buckets and then create a CNQ cluster with 3 to 24 instances that adhere to the [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/) and have fully elastic compute and persistent storage on S3.
+
+  ## Configure Terraform provider.tf
+  This Terraform now defaults to store state on S3.  As such the persistent-storage/provider.tf and the ./provider.tf must both be configured with the S3 bucket and S3 bucket region you choose to store state in.
+  If you don't have an explicit bucket for storing state you may use the same 'utility bucket' that is used in the TFVAR 's3_bucket_name'.  
+  Note you can't put variables in the provider backend config, which is why this note is here.
+
+  ## Getting Started with Cloud Native Qumulo (CNQ)
+  For an overview of CNQ, its reference architecture, and limits, see [How Cloud Native Qumulo Works](https://docs.qumulo.com/aws-administrator-guide/getting-started/how-cloud-native-qumulo-works.html) and for prerequisites and detailed instructions, see [Deploying Cloud Native Qumulo on AWS with Terraform](https://docs.qumulo.com/aws-administrator-guide/getting-started/deploying-instance-terraform.html) on the Documentation Portal.
+
+  Qumulo Core >= 7.4.1 is required for this Terraform
+  
+  Qumulo core >= 7.4.2 is required for single node cluster support
+
+  Qumulo core >= 7.4.3 is required for m6i support and building the read cache with EBS
+
+  Qumulo core >= 7.5.0 is required for Qumulo hosted DNS resolution for floating IPs with Single AZ clusters
+
+  > ✅ **Tip:** For help with deployment, configuration, updates, scaling out your cluster, and best practices for high performance, [message us on Slack](https://docs.qumulo.com/contacting-qumulo-care-team.html).
+
+
+  ---
+  
+  ### Standard Deployment Example
+  
+  ```hcl
+  {{ include "examples/standard.tf" }}
+  ```
+  
+  ---
+  
+  ## Terraform Documentation
+  
+  > ℹ️ **Note:** This repository uses documentation generated with Terraform-Docs.
+  
+  {{ .Requirements }}
+  
+  {{ .Inputs }}
+  
+  {{ .Outputs }}
+  
+  ---
+  
+  ## About This Repository
+  This repository uses the [MIT license](LICENSE). All contents Copyright &copy; 2024 [Qumulo, Inc.](https://qumulo.com), except where specified. All trademarks are property of their respective owners.
+
+  For more information about this repository, contact [Dack Busch](https://github.com/dackbusch) and [Gokul Kupparaj](https://github.com/gokulku).
+
+sections:
+  show:
+    - requirements
+    - inputs
+    - outputs
+
+sort:
+  enabled: true
+  by: name
+
+output:
+  file: README.md
+  mode: replace
