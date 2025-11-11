@@ -358,7 +358,22 @@ resource "aws_s3_bucket_policy" "qumulo-persistent-storage" {
 					"aws:SecureTransport": "true"
 				}
 			}      
-    }    
+    },
+     {
+            "Sid": "MustBeEncryptedInTransit",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "s3:*",
+            "Resource": [
+              "arn:${var.aws_partition}:s3:::${local.cluster_persistent_bucket_names[count.index]}",
+              "arn:${var.aws_partition}:s3:::${local.cluster_persistent_bucket_names[count.index]}/*" 
+            ],
+            "Condition": {
+                "Bool": {
+                    "aws:SecureTransport": "false"
+                }
+            }
+        }    
   ]
 }
 EOF
@@ -472,7 +487,22 @@ resource "aws_s3_bucket_policy" "qumulo-persistent-storage-combo" {
 					"aws:SecureTransport": "true"
 				}
 			}      
-    }        
+    },
+    {
+            "Sid": "MustBeEncryptedInTransit",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "s3:*",
+            "Resource": [
+              "arn:${var.aws_partition}:s3:::${local.cluster_persistent_bucket_names[count.index]}",
+              "arn:${var.aws_partition}:s3:::${local.cluster_persistent_bucket_names[count.index]}/*" 
+            ],
+            "Condition": {
+                "Bool": {
+                    "aws:SecureTransport": "false"
+                }
+            }
+        }            
   ]
 }
 EOF
