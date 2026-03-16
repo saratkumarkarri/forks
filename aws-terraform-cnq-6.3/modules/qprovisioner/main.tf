@@ -688,7 +688,7 @@ resource "aws_instance" "provisioner" {
     encrypted   = true
     kms_key_id  = var.kms_key_id == null ? "" : "arn:${var.aws_partition}:kms:${var.aws_region}:${var.aws_account_id}:key/${var.kms_key_id}"
     volume_type = var.boot_type
-    volume_size = 40
+    volume_size = var.boot_volume_size
 
     tags = merge(var.tags, { Name = "${var.deployment_unique_name}-provisioner" })
   }

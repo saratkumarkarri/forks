@@ -108,6 +108,15 @@ variable "q_boot_drive_size" {
   nullable    = false
   default     = 256
 }
+variable "q_provisioner_boot_size" {
+  description = "Size (GB) of the provisioner root volume. Increase if the AMI snapshot requires more space."
+  type        = number
+  default     = 150
+  validation {
+    condition     = var.q_provisioner_boot_size >= 150
+    error_message = "The provisioner root volume must be at least 150 GB to satisfy the AMI snapshot requirements."
+  }
+}
 variable "q_cluster_additional_sg_cidrs" {
   description = "OPTIONAL: AWS additional security group CIDRs for the Qumulo cluster"
   type        = string
