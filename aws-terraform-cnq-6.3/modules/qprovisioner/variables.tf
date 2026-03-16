@@ -52,6 +52,15 @@ variable "boot_type" {
   description = "OPTIONAL: Specify the type of EBS for the boot drive"
   type        = string
 }
+variable "boot_volume_size" {
+  description = "Size (GB) of the provisioner root EBS volume. Must be large enough for the AMI snapshot."
+  type        = number
+  default     = 150
+  validation {
+    condition     = var.boot_volume_size >= 150
+    error_message = "The provisioner root volume must be at least 150 GB to satisfy the AMI snapshot requirements."
+  }
+}
 variable "check_provisioner_shutdown" {
   description = "Executes a local-exec script on the Terraform machine to check if the provisioner instance shutdown which indicates a successful cluster deployment."
   type        = bool

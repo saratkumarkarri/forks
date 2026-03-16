@@ -254,6 +254,7 @@ module "qprovisioner" {
   ena_express                               = module.qcluster.ena_express
   existing_deployment_unique_name           = var.q_existing_deployment_unique_name
   boot_type                                 = var.q_boot_dkv_type
+  boot_volume_size                          = var.q_provisioner_boot_size
   flash_tput                                = module.qcluster.write_cache_tput == null ? 0 : module.qcluster.write_cache_tput
   flash_iops                                = module.qcluster.write_cache_iops == null ? 0 : module.qcluster.write_cache_iops
   functions_s3_prefix                       = local.functions_s3_prefix
