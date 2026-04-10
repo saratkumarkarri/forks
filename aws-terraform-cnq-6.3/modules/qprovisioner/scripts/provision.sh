@@ -475,8 +475,26 @@ elif [ "$new_cluster" == "true" ] && [ "$replace_cluster" == "true" ]; then
     ./qq --host ${existingIPs[0]} network_mod_network --network-id 1 --floating-ip-ranges ""
   fi
   ./qq --host ${existingIPs[0]} raw PUT /v1/conf/log/module/%2F <<<"{\"level\": \"QM_LOG_DEBUG\", \"reset\": false}"
-  ./qq --host ${existingIPs[0]} modify_object_backed_cluster_membership --node-ips-and-fault-domains ${node_ips_fault_ids[@]} --batch
-
+  
+  # start MCS-2084: add retry logic for modify_object_backed_cluster_membership to avoid race condition
+  retries=20
+  count=1
+  success=false
+  echo "Attempting to update cluster membership (max $retries retries with exponential backoff)"
+  until ./qq --host ${existingIPs[0]} modify_object_backed_cluster_membership --node-ips-and-fault-domains ${node_ips_fault_ids[@]} --batch
+  do
+    if [ $count -ge $retries ]; then
+      echo "WARN: membership update failed after $retries attempts"
+      break
+    fi
+    sleep_duration=$((10 * 2 ** (count - 1)))
+    echo "Attempt $count/$retries failed. Retrying in ${sleep_duration}s..."
+    sleep $sleep_duration
+    count=$((count + 1))
+  done
+  [ $count -lt $retries ] && echo "Cluster membership updated successfully on attempt $count"
+  # end MCS-2084
+  
   ssmput "last-run-status" "$region" "$deployment_name" "Detected CLUSTER REPLACE.  Waiting for new quorum."
 
   until $qqh node_state_get | grep -q "ACTIVE"; do
